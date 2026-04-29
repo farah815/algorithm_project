@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from executor import SafeExecutor
-from algorithm_project.analyzer import ComplexityAnalyzer, ModelRegistry
+from analyzer import ComplexityAnalyzer, ModelRegistry
 
 class AlgorithmProfilerApp:
     def __init__(self, root):
