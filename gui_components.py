@@ -4,7 +4,7 @@ gui_components.py
 Reusable GUI widgets for the Algorithm Performance Evaluator.
 
 - highlight_syntax    : syntax highlighting for a tkinter Text widget
-- LineNumberedText    : code editor with line numbers
+- LineNumberedText    : code editor with line numbers (improved readability)
 """
 
 import tkinter as tk
@@ -77,12 +77,22 @@ class LineNumberedText(ctk.CTkFrame):
 
     def __init__(self, master, **kwargs):
         super().__init__(master, fg_color="transparent")
-        self.text = tk.Text(self, wrap="none", undo=True, font=("Consolas", 11),
-                            bg=COLORS["bg_code"], fg=COLORS["fg_code"],
-                            insertbackground=COLORS["fg_code"], relief="flat",
-                            padx=8, pady=6, **kwargs)
+
+        # Sensible defaults (overridable by caller)
+        kwargs.setdefault("font", ("Consolas", 12))
+        kwargs.setdefault("spacing1", 2)
+        kwargs.setdefault("bg", COLORS["bg_code"])
+        kwargs.setdefault("fg", COLORS["fg_code"])
+        kwargs.setdefault("insertbackground", COLORS["fg_code"])
+        kwargs.setdefault("relief", "flat")
+        kwargs.setdefault("padx", 8)
+        kwargs.setdefault("pady", 6)
+
+        self.text = tk.Text(self, wrap="none", undo=True, **kwargs)
+
         self.line_numbers = tk.Text(self, width=5, wrap="none", takefocus=0,
-                                    bg="#1a1d35", fg="#94a3b8", font=("Consolas", 11),
+                                    bg="#1a1d35", fg="#94a3b8",
+                                    font=kwargs["font"],
                                     relief="flat", padx=3, pady=6)
         self.line_numbers.pack(side="left", fill="y")
         self.text.pack(side="right", fill="both", expand=True)
@@ -95,6 +105,7 @@ class LineNumberedText(ctk.CTkFrame):
         self.text.bind("<Tab>",         self._tab_press)
         self.text.bind("<Control-z>",   self._undo)
         self.text.bind("<Control-y>",   self._redo)
+
         self._update_line_numbers()
         highlight_syntax(self.text)
 
